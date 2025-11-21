@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <title>Fami – Founding Families</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- Typsnitt Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-deep: #000000; /* Helt svart/djup för OLED-skärmar */
+      --bg-gradient: radial-gradient(circle at 50% 0%, #112215 0%, #000000 70%);
+      --primary: #22c55e;
+      --text-main: #ffffff;
+      --text-muted: #a1a1aa;
+      --input-bg: #121212;
+      --input-border: #27272a;
+      --gold: #fbbf24;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: var(--bg-deep);
+      background-image: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* LAYOUT: Enkel, centrerad kolumn */
+    .container {
+      width: 100%;
+      max-width: 540px; /* Smalare för fokus */
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+      flex: 1;
+    }
+
+    /* HEADER */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      padding-top: 10px;
+    }
+
+    .back-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    
+    .back-link:hover { color: #fff; }
+
+    /* Language Toggle (Minimal) */
+    .lang-toggle {
+      display: flex;
+      gap: 12px;
+    }
+
+    .lang-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      padding: 4px;
+      opacity: 0.6;
+    }
+
+    .lang-btn--active {
+      color: #fff;
+      opacity: 1;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-color: var(--primary);
+    }
+
+    /* HERO TEXT */
+    .hero-section {
+      margin-bottom: 40px;
+    }
+
+    .gold-label {
+      color: var(--gold);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    h1 {
+      font-size: 2.2rem; /* Bra storlek för mobil */
+      line-height: 1.1;
+      font-weight: 600;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .intro-text {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 0;
+    }
+
+    /* FORMULÄR - Inga rutor, bara rena fält */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #d4d4d8;
+      margin-left: 2px;
+    }
+
+    /* Premium Inputs: Mörka block som smälter in */
+    input, textarea {
+      width: 100%;
+      background-color: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 16px; /* Förhindrar zoom på iPhone */
+      color: #fff;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background-color: #1a1a1a;
+      box-shadow: 0 0 0 1px var(--primary); /* Subtle glow */
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: #52525b;
+    }
+
+    /* Checkbox custom style */
+    .checkbox-wrapper {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-top: 8px;
+    }
+
+    .checkbox-wrapper input {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .checkbox-text {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Submit Button - Fullbredd och tydlig */
+    .submit-btn {
+      background: var(--primary);
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      padding: 18px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: transform 0.1s;
+    }
+
+    .submit-btn:active {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+
+    /* Footer note */
+    .small-note {
+      font-size: 0.75rem;
+      color: #52525b;
+      text-align: center;
+      margin-top: 24px;
+      line-height: 1.5;
+    }
+
+    /* Messages */
+    #success-message, #error-message {
+      display: none;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    
+    #success-message {
+      background: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+    }
+    
+    #error-message {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+    }
+
+    /* Desktop justeringar för att det inte ska se tomt ut på stor skärm */
+    @media (min-width: 768px) {
+      .container {
+        padding-top: 60px;
+      }
+      h1 {
+        font-size: 3rem;
+      }
+      .hero-section {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+      .intro-text {
+        max-width: 400px;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- HEADER -->
+    <header>
+      <a href="index.html" class="back-link">
+        ← <span data-i18n="backLabel">Tillbaka</span>
+      </a>
+      
+      <div class="lang-toggle">
+        <button class="lang-btn lang-btn--active" data-lang="sv">SV</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+    </header>
+
+    <!-- HERO CONTENT -->
+    <div class="hero-section">
+      <span class="gold-label">Founding Families</span>
+      <h1 data-i18n="heroTitle">Gå med i Fami</h1>
+      <p class="intro-text" data-i18n="heroIntro">
+        Bli en av de första 100 familjerna som formar hur vi bevarar vår historia.
+      </p>
+    </div>
+
+    <!-- CLEAN FORM -->
+    <form id="waitlist-form" action="https://formspree.io/f/xldzalqb" method="POST">
+      
+      <div class="field-group">
+        <label for="name" data-i18n="fieldName">Namn</label>
+        <input id="name" name="name" type="text" required 
+               data-i18n-placeholder="namePlaceholder" placeholder="Vad heter du?">
+      </div>
+
+      <div class="field-group">
+        <label for="email" data-i18n="fieldEmail">E-post</label>
+        <input id="email" name="email" type="email" required 
+               data-i18n-placeholder="emailPlaceholder" placeholder="din@email.com">
+      </div>
+
+      <div class="field-group">
+        <label for="country" data-i18n="fieldCountry">Land</label>
+        <input id="country" name="country" type="text" 
+               data-i18n-placeholder="countryPlaceholder" placeholder="Var bor du?">
+      </div>
+
+      <div class="field-group">
+        <label for="family" data-i18n="fieldFamily">Kort om din familj (Valfritt)</label>
+        <textarea id="family" name="family" 
+                  data-i18n-placeholder="familyPlaceholder" 
+                  placeholder="Berätta vad du vill bevara..."></textarea>
+      </div>
+
+      <div class="checkbox-wrapper">
+        <input id="consent" name="consent" type="checkbox" required>
+        <span class="checkbox-text" data-i18n="consentText">
+          Jag vill få uppdateringar om Fami.
+        </span>
+      </div>
+
+      <button type="submit" class="submit-btn" data-i18n="submitLabel">Skriv upp mig</button>
+
+      <p class="small-note" data-i18n="heroFootnote">
+        Ingen spam. Du kan avregistrera dig när du vill. Vi bygger detta tillsammans.
+      </p>
+
+      <div id="success-message">
+        <strong data-i18n="successTitle">Välkommen!</strong><br>
+        <span data-i18n="successMessage">Du är nu med på listan.</span>
+      </div>
+      <div id="error-message" data-i18n="errorMessage">
+        Något gick fel. Testa igen.
+      </div>
+
+    </form>
+  </div>
+
+  <!-- JS LOGIC -->
+  <script>
+    const translations = {
+      sv: {
+        backLabel: "Tillbaka",
+        heroTitle: "Gå med i Fami",
+        heroIntro: "Bli en av de första 100 familjerna som formar hur vi bevarar vår historia.",
+        fieldName: "Namn",
+        namePlaceholder: "Vad heter du?",
+        fieldEmail: "E-post",
+        emailPlaceholder: "din@email.com",
+        fieldCountry: "Land",
+        countryPlaceholder: "Var bor du?",
+        fieldFamily: "Kort om din familj (Valfritt)",
+        familyPlaceholder: "Berätta vad du vill bevara...",
+        consentText: "Jag vill få uppdateringar om Fami.",
+        submitLabel: "Skriv upp mig",
+        heroFootnote: "Ingen spam. Du kan avregistrera dig när du vill. Vi bygger detta tillsammans.",
+        successTitle: "Välkommen!",
+        successMessage: "Du är nu med på listan.",
+        errorMessage: "Något gick fel. Testa igen."
+      },
+      en: {
+        backLabel: "Back",
+        heroTitle: "Join Fami",
+        heroIntro: "Become one of the first 100 families to shape how we preserve our history.",
+        fieldName: "Name",
+        namePlaceholder: "What's your name?",
+        fieldEmail: "Email",
+        emailPlaceholder: "your@email.com",
+        fieldCountry: "Country",
+        countryPlaceholder: "Where do you live?",
+        fieldFamily: "About your family (Optional)",
+        familyPlaceholder: "Tell us what you want to preserve...",
+        consentText: "I want updates about Fami.",
+        submitLabel: "Sign me up",
+        heroFootnote: "No spam. Unsubscribe anytime. We are building this together.",
+        successTitle: "Welcome!",
+        successMessage: "You are on the list.",
+        errorMessage: "Something went wrong. Try again."
+      }
+    };
+
+    function applyTranslations(lang) {
+      const dict = translations[lang] || translations.sv;
+      document.documentElement.lang = lang === "en" ? "en" : "sv";
+
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (dict[key]) el.textContent = dict[key];
+      });
+
+      document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const key = el.getAttribute("data-i18n-placeholder");
+        if (dict[key]) el.placeholder = dict[key];
+      });
+
+      document.querySelectorAll(".lang-btn").forEach(btn => {
+        btn.classList.toggle("lang-btn--active", btn.dataset.lang === lang);
+      });
+    }
+
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        applyTranslations(btn.dataset.lang);
+      });
+    });
+
+    applyTranslations("sv");
+
+    // Form submission logic
+    const form = document.getElementById("waitlist-form");
+    const successMessage = document.getElementById("success-message");
+    const errorMessage = document.getElementById("error-message");
+    const submitBtn = document.querySelector(".submit-btn");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      successMessage.style.display = "none";
+      errorMessage.style.display = "none";
+      
+      const originalText = submitBtn.innerText;
+      submitBtn.innerText = "...";
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = "0.7";
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: formData,
+          headers: { "Accept": "application/json" }
+        });
+
+        if (response.ok) {
+          form.reset();
+          // Hide inputs gently to show success clearly
+          Array.from(form.children).forEach(child => {
+              if(child.id !== 'success-message') child.style.display = 'none';
+          });
+          successMessage.style.display = "block";
+        } else {
+          errorMessage.style.display = "block";
+          submitBtn.innerText = originalText;
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = "1";
+        }
+      } catch (err) {
+        errorMessage.style.display = "block";
+        submitBtn.innerText = originalText;
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = "1";
+      }
+    });
+  </script>
+</body>
+</html>
